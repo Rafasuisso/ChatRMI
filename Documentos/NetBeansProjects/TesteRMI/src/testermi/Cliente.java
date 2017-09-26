@@ -25,32 +25,32 @@ public class Cliente {
             System.out.println("Digite seu nome:");
             nome = scanner.nextLine();
             Thread thread = new Thread(new Runnable() {
-            int contM = chat.lerMensagem().size();
-            //int cont = chat.lerMensagem().size();
-            @Override
-            public void run() {
-                try {
-                    while(true){
-                    if (chat.lerMensagem().size() > contM){
-                    System.out.println(chat.lerMensagem().get(chat.lerMensagem().size()-1));
-                    contM++;
+                int cont = chat.lerMensagem().size();
+                //int cont = chat.lerMensagem().size();
+                @Override
+                public void run() {
+                    try {
+                        while(true){
+                            if (chat.lerMensagem().size() > cont){
+                                System.out.println(chat.lerMensagem().get(chat.lerMensagem().size()-1));
+                                cont++;
+                            }
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
+            });
+            thread.start();
+            while(msg != "exit"){
+                System.out.println(nome+": ");
+                msg = scanner.nextLine();
+                chat.enviarMensagem(nome+": "+msg);
+       
             }
-                 } catch (RemoteException e) {
-                     e.printStackTrace();
-                 }
-             }
-        });
-        thread.start();
-        while(msg != "exit"){
-        System.out.println(nome+": ");
-        msg = scanner.nextLine();
-        chat.enviarMensagem(nome+": "+msg);
-        // System.out.println(chat.lerMensagem().get(cont));
-        }
         }
         catch( Exception e ) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
