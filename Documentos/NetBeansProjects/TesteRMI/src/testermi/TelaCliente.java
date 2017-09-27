@@ -5,17 +5,32 @@
  */
 package testermi;
 
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.util.Scanner;
+
 /**
  *
  * @author FaelT
  */
 public class TelaCliente extends javax.swing.JFrame {
-
+    String nome;
+     public ServidorChat chat;
     /**
      * Creates new form TelaCliente
      */
     public TelaCliente() {
         initComponents();
+    }
+
+    TelaCliente(String nome) {
+        this.nome = nome;
+         try {
+            chat = (ServidorChat) Naming.lookup( "rmi://localhost:1098/ServidorChat" );
+            }
+        catch( Exception e ) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -30,12 +45,12 @@ public class TelaCliente extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         areaDeChat = new javax.swing.JPanel();
-        btnEnviar = new javax.swing.JButton();
+        BtnEnviar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         campoNome = new javax.swing.JTextField();
         btnConectar = new javax.swing.JButton();
         btnDesconectar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        AreaMensagem = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
 
@@ -63,12 +78,17 @@ public class TelaCliente extends javax.swing.JFrame {
             .addGap(0, 279, Short.MAX_VALUE)
         );
 
-        btnEnviar.setFont(new java.awt.Font("Sylfaen", 0, 18)); // NOI18N
-        btnEnviar.setText("Enviar");
-        btnEnviar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+        BtnEnviar.setFont(new java.awt.Font("Sylfaen", 0, 18)); // NOI18N
+        BtnEnviar.setText("Enviar");
+        BtnEnviar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BtnEnviar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BtnEnviarMouseClicked(evt);
+            }
+        });
+        BtnEnviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarActionPerformed(evt);
+                BtnEnviarActionPerformed(evt);
             }
         });
 
@@ -84,10 +104,10 @@ public class TelaCliente extends javax.swing.JFrame {
         btnDesconectar.setText("Desconectar");
         btnDesconectar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTextField1.setToolTipText("Digite aqui sua mensgem");
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        AreaMensagem.setToolTipText("Digite aqui sua mensgem");
+        AreaMensagem.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
+                AreaMensagemKeyPressed(evt);
             }
         });
 
@@ -117,9 +137,9 @@ public class TelaCliente extends javax.swing.JFrame {
                         .addComponent(btnDesconectar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 53, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
+                        .addComponent(AreaMensagem)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(BtnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(areaDeChat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -140,8 +160,8 @@ public class TelaCliente extends javax.swing.JFrame {
                         .addComponent(areaDeChat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(AreaMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BtnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -162,61 +182,34 @@ public class TelaCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+    private void BtnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEnviarActionPerformed
+        String msg = "";
+        try{
+        chat.enviarMensagem(nome+": "+msg);
+        }catch(Exception e){e.printStackTrace();}
+    }//GEN-LAST:event_BtnEnviarActionPerformed
+
+    private void AreaMensagemKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AreaMensagemKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarActionPerformed
+    }//GEN-LAST:event_AreaMensagemKeyPressed
 
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+    private void BtnEnviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnEnviarMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1KeyPressed
+    }//GEN-LAST:event_BtnEnviarMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaCliente().setVisible(true);
-            }
-        });
-    }
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField AreaMensagem;
+    private javax.swing.JButton BtnEnviar;
     private javax.swing.JPanel areaDeChat;
     private javax.swing.JButton btnConectar;
     private javax.swing.JButton btnDesconectar;
-    private javax.swing.JButton btnEnviar;
     private javax.swing.JTextField campoNome;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

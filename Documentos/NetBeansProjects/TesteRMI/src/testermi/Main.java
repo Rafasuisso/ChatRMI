@@ -190,7 +190,8 @@ public class Main extends javax.swing.JFrame {
         if(contClientes >0){
             contClientes--;
             String nome = CampoNome.getText();
-            Cliente cliente = new Cliente(nome);
+            TelaCliente cliente = new TelaCliente(nome);
+            cliente.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Sala Cheia");
         }
