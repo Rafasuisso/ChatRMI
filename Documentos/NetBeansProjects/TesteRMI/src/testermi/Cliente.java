@@ -16,17 +16,15 @@ import java.lang.Thread.*;
 import java.util.ArrayList;
 import java.rmi.RemoteException;
 public class Cliente {
-    public static void main( String args[] ) {
-        try {
+    String nome;
+    public Cliente(String nome){
+        this.nome = nome;
+         try {
             final ServidorChat chat = (ServidorChat) Naming.lookup( "rmi://localhost:1098/ServidorChat" );
-            String nome;
-            String msg = "";
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Digite seu nome:");
-            nome = scanner.nextLine();
+            String msg = "";
             Thread thread = new Thread(new Runnable() {
                 int cont = chat.lerMensagem().size();
-                //int cont = chat.lerMensagem().size();
                 @Override
                 public void run() {
                     try {
@@ -52,5 +50,9 @@ public class Cliente {
         catch( Exception e ) {
             e.printStackTrace();
         }
+            
     }
+    
+   
+    
 }

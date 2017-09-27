@@ -16,10 +16,10 @@ public class ServidorChatImpl extends java.rmi.server.UnicastRemoteObject implem
     ArrayList<String> mensagens;
     ArrayList<String> usuarios;
     //int nMensagens;
-    public ServidorChatImpl() throws RemoteException {
+    public ServidorChatImpl(int tamanho) throws RemoteException {
         super();
         this.mensagens = new ArrayList<String>();
-        this.usuarios  = new ArrayList<String>();
+        this.usuarios  = new ArrayList<String>(tamanho);
 
     }
     public void enviarMensagem(String mensagem) throws RemoteException{
